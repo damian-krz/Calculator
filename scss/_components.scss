@@ -1,0 +1,41 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: 'Heebo', sans-serif;
+    font-size: 62.5%;
+}
+
+.wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.number {
+    font-weight: bold;
+}
+
+.notNumber {
+    background-color: rgb(214, 132, 144);
+}
+
+.equals {
+    background-color: rgb(41, 84, 214);
+
+    &:hover {
+        background-color: rgb(78, 112, 216);
+        box-shadow: -.5px -.5px 1px grey;
+    }
+}
+
+@font-face { 
+    font-family: display;
+    src: url("/assets/digital.ttf")
+}

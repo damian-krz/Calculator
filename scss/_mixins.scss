@@ -1,0 +1,12 @@
+@mixin button {
+    margin: .1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 12rem;
+    height: 6rem;
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: .25rem;
+    box-shadow: 1px 1px 1px black;
+}

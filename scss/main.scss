@@ -1,0 +1,46 @@
+@import "./components";
+@import "./mixins";
+
+.calculator__main {
+    background-color:rgb(225, 179, 186);
+    padding: 2rem;
+}
+
+.calculator {
+    width: 51rem;
+    padding: .5rem;
+    border-radius: .5rem;
+    background-color: rgb(213, 143, 154);
+
+    &__display {
+        display: flex;
+        justify-content: flex-end;
+        padding: 2rem;
+        background-color: black;
+        font-family: display;
+        font-size: 5rem;
+        color: red;
+        border-radius: .25rem;
+    }
+    
+    &__calcBoard {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: .5rem;
+        padding: .5rem;
+        background-color: rgb(233, 179, 187);
+        font-size: 2rem;
+        border-radius: .25rem;
+        box-shadow: 1px 1px 1px black;
+        
+        &--button {
+            @include button;
+
+            &:hover {
+                background-color: rgb(204, 204, 204);
+                box-shadow: -.5px -.5px 1px black;
+            }
+        }
+    }
+}
