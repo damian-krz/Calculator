@@ -15,7 +15,7 @@ export class Button extends UI {
         return element;
     };
 
-    setValue() {
-        this.element.textContent = this.value;
+    setValue(value) {
+        this.value = value;
     };
 };

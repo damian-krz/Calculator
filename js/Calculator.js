@@ -12,7 +12,7 @@ class Calculator extends UI {
 
     display = new Display();
 
-    displayValue = [];
+    
     buttons = [];
     board = this.getElement(this.UISelectors.board);
     // boardButtons = this.getElements(this.UISelectors.button);
@@ -46,53 +46,107 @@ class Calculator extends UI {
         };
 
     };
-    
+
+
+    displayValue = [];
+    operator = null;
+    dataArray = [];
+    number = 0;
+    iterator = 0;
+
     buttonEventListeners() {
         this.boardButtons = this.getElements(this.UISelectors.button);
-        let array = [];
-        let number = 0;
-        let total = 0;
-        let operator = null;
         this.boardButtons.forEach(element => {
             element.addEventListener("click", (e) => {
                 const target = e.target;
                 const rowIndex = parseInt(target.getAttribute("data-y"), 10);
                 const columnIndex = parseInt(target.getAttribute("data-x"), 10);
                 const button = this.buttons[rowIndex][columnIndex];
-                button.value = e.target.textContent;
+                button.setValue(e.target.textContent);
                 
-
                 if(!isNaN(button.value) || button.value === ".") {
                     this.displayValue.push(button.value); 
                     this.display.setValue(this.displayValue.join(""));
-                    number = parseFloat(this.display.value);
+                    this.number = parseFloat(this.display.value);
+                    this.dataArray[this.iterator] = this.number;
                 }; 
-                
+
                 if (button.value === "+") {
-                    array.push(number);
-                    this.displayValue = [];
-                    total += number;
-                    this.display.setValue(total);
-                    operator = "+";
+                    this.handleOperator("+");
                 };
-                
+
+                if (button.value === "-") {
+                    this.handleOperator("-");;
+                };
+
+                if (button.value === "x") {
+                    this.handleOperator("*");
+                };
+
+                if (button.value === "/") {
+                    this.handleOperator("/");
+                };
+
                 if(button.value === "=") {
-                    array.push(number);
-                    switch(operator) {
+                    switch(this.operator) {
                         case "+":
-                        this.display.setValue(array[0] + array[1]);
+                            let result1 = this.dataArray[0] + this.dataArray[1]
+                            this.display.setValue(result1);
+                            this.dataArray[0] = result1;
+                            this.dataArray.pop();
+                            this.iterator = 0;
+                            break;
+                        case "-":
+                            let result2 = this.dataArray[0] - this.dataArray[1]
+                            this.display.setValue(result2);
+                            this.dataArray[0] = result2;
+                            this.dataArray.pop();
+                            this.iterator = 0;
+                            break;
+                        case "*":
+                            let result3 = this.dataArray[0] * this.dataArray[1]
+                            this.display.setValue(result3);
+                            this.dataArray[0] = result3;
+                            this.dataArray.pop();
+                            this.iterator = 0;
+                            break;
+                        case "/":
+                            let result4 = this.dataArray[0] / this.dataArray[1]
+                            this.display.setValue(result4);
+                            this.dataArray[0] = result4;
+                            this.dataArray.pop();
+                            this.iterator = 0;
+                            break;
                     }
                 };
 
+                if(button.value === "bckspc") {
+                    this.displayValue.pop();
+                    this.display.setValue(this.displayValue.join(""));
+                    this.number = parseFloat(this.display.value);
+                    this.dataArray[this.iterator] = this.number;
+                };
+
                 if(button.value === "C") {
-                    array = [];
+                    this.iterator = 0;
+                    this.dataArray = [];
                     this.displayValue = [];
                     this.display.setValue(0);
                 };
             });
         });
-    }
-        
+    };
+    
+    handleOperator(operator) {
+        if(this.dataArray[this.iterator] != null) {
+            this.iterator++;
+            this.operator = operator;
+            this.displayValue = [];
+            this.display.value = 0;
+        };
+        console.log(this.dataArray);
+    };
+    
     renderBoard() {
         this.buttons.flat().forEach((button) => {
             this.board.insertAdjacentHTML("beforeend", button.createButton());
