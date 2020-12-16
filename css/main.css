@@ -55,6 +55,21 @@ html {
   background-color: #d58f9a;
 }
 
+.calculator__showEquation {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  padding: 2rem;
+  background-color: black;
+  font-family: display;
+  font-size: 2.5rem;
+  color: red;
+  border-radius: .25rem;
+}
+
 .calculator__display {
   display: -webkit-box;
   display: -ms-flexbox;

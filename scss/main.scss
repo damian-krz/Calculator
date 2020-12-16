@@ -12,6 +12,17 @@
     border-radius: .5rem;
     background-color: rgb(213, 143, 154);
 
+    &__showEquation {
+        display: flex;
+        justify-content: flex-end;
+        padding: 2rem;
+        background-color: black;
+        font-family: display;
+        font-size: 2.5rem;
+        color: red;
+        border-radius: .25rem; 
+    }
+
     &__display {
         display: flex;
         justify-content: flex-end;

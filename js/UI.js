@@ -2,7 +2,8 @@ export class UI {
     UISelectors = {
         board: "[data-board]",
         button: "[data-button]",
-        display: "[data-display]"
+        display: "[data-display]",
+        showEquation: "[data-showEquation]"
     };
     
     getElement(selector) {
