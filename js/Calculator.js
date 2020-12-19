@@ -9,7 +9,7 @@ class Calculator extends UI {
         rows: 6,
         columns: 4,
         boardButtonValues: ["%", "CE", "C", "bckspc", "1/x", "x^2", "2sqrtX", "/", "7", "8", "9", "*", "4", "5", "6", "-", "1", "2", "3", "+", "+/-", "0", ".", "="],
-        operators: ["+", "-", "*", "/"],
+        operators: ["+", "-", "*", "/", "="],
         numbers: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
     };
 
@@ -17,7 +17,6 @@ class Calculator extends UI {
     equationDisplay = new EquationDisplay();
     buttons = [];
     board = this.getElement(this.UISelectors.board);
-    // boardButtons = this.getElements(this.UISelectors.button);
     
     runCalculator() {
         this.generateButtons();
@@ -27,7 +26,7 @@ class Calculator extends UI {
         this.display.init();
         this.display.setValue(0);
         this.equationDisplay.init();
-        this.equationDisplay.setValue(0);
+        this.equationDisplay.setValue();
     };
 
     generateButtons() {
@@ -43,15 +42,18 @@ class Calculator extends UI {
         for(let i = 0; i < this.config.boardButtonValues.length; i++) {
             this.board.children[i].textContent = `${this.config.boardButtonValues[i]}`;
         };
-
+        
     };
-
+    
     equationValue = [];
     displayValue = [];
     currentOperator = null;
+    lastOperator = null;
     dataArray = [];
     number = 0;
     iterator = 0;
+    result = 0;
+    button = null;
     
     buttonEventListeners() {
         this.boardButtons = this.getElements(this.UISelectors.button);
@@ -60,26 +62,46 @@ class Calculator extends UI {
                 const target = e.target;
                 const rowIndex = parseInt(target.getAttribute("data-y"), 10);
                 const columnIndex = parseInt(target.getAttribute("data-x"), 10);
-                const button = this.buttons[rowIndex][columnIndex];
-                button.setValue(e.target.textContent);
+                this.button = this.buttons[rowIndex][columnIndex];
+                this.button.setValue(e.target.textContent);
+                console.log(this.dataArray);
 
-                if(this.config.numbers.includes(button.value)) {
-                    this.handleNumber(button.value);
+                if(this.config.numbers.includes(this.button.value)) {
+                    this.handleNumber(this.button.value);
                 }; 
 
-                if(this.config.operators.includes(button.value)) {
-                    this.handleOperator(button.value);
+                if(this.config.operators.includes(this.button.value)) {
+                    this.handleOperator(this.button.value);
                 };
 
-                if(button.value === "bckspc") {
+                // if(button.value === "=") {
+                //     console.log(this.result);
+                //     console.log(this.operator);
+                // };
+
+                if(this.button.value === "bckspc") {
                     this.displayValue.pop();
                     this.display.setValue(this.displayValue.join(""));
                     this.number = parseFloat(this.display.value);
                     this.dataArray[this.iterator] = this.number;
+                    if(this.displayValue.length === 0) {
+                        this.display.setValue(0);
+                    };
+                };
+                
+                if(this.button.value === "x^2") {
+                    let number = this.display.value;
+                    let result = Math.pow(number, 2);
+                    this.display.setValue(result);
                 };
 
-                if(button.value === "C") {
+                if(this.button.value === "C") {
                     this.resetAll();
+                };
+
+                if(this.button.value === "CE") {
+                    this.displayValue = [];
+                    this.display.setValue(0);
                 };
             });
         });
@@ -108,30 +130,36 @@ class Calculator extends UI {
             this.equationDisplay.setValue(this.equationValue.join(""));
             this.display.setValue(this.number);
             this.currentOperator = this.equationValue[this.equationValue.length - 3];
+            this.lastOperator = this.equationValue[this.equationValue.length];
             this.iterator++;
             
-            if(this.currentOperator != undefined && this.dataArray[this.iterator] != undefined) {
+            
+            if(this.currentOperator != undefined) {
                 switch(this.currentOperator) {
                     case "+":
-                        console.log(this.dataArray);
-                        this.dataArray[0] = this.dataArray[0] + this.dataArray[this.iterator];
-                        this.display.setValue(this.dataArray[0]);
+                        this.result = this.dataArray[0] + this.dataArray[this.iterator-1];
+                        this.dataArray[0] = this.result;
+                        this.display.setValue(this.result);
+                        // console.log(this.result);
                         break;
                     case "-":
-                        this.dataArray[0] = this.dataArray[0] - this.dataArray[1];
-                        this.display.setValue(this.dataArray[0]);
-                        console.log(this.dataArray);
+                        this.result = this.dataArray[0] - this.dataArray[this.iterator-1];
+                        this.dataArray[0] = this.result;
+                        this.display.setValue(this.result);
+                        // console.log(this.result);
                         break;
                     case "*":
-                        this.dataArray[0] = this.dataArray[0] * this.dataArray[1];
-                        this.display.setValue(this.dataArray[0]);
-                        console.log(this.dataArray);
+                        this.result = this.dataArray[0] * this.dataArray[this.iterator-1];
+                        this.dataArray[0] = this.result;
+                        this.display.setValue(this.result);
+                        // console.log(this.result);
                         break;
                     case "/":
-                        this.dataArray[0] = this.dataArray[0] / this.dataArray[1];
-                        this.display.setValue(this.dataArray[0]);
-                        console.log(this.dataArray);
-                        break;
+                        this.result = this.dataArray[0] / this.dataArray[this.iterator-1];
+                        this.dataArray[0] = this.result;
+                        this.display.setValue(this.result);
+                        // console.log(this.result);
+                        break; 
                 };
             };
 
