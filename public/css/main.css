@@ -1,0 +1,131 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+html {
+  font-family: 'Heebo', sans-serif;
+  font-size: 62.5%;
+}
+
+.wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.number {
+  font-weight: bold;
+}
+
+.notNumber {
+  background-color: #d68490;
+}
+
+.equals {
+  background-color: #2954d6;
+}
+
+.equals:hover {
+  background-color: #4e70d8;
+  -webkit-box-shadow: -.5px -.5px 1px grey;
+          box-shadow: -.5px -.5px 1px grey;
+}
+
+@font-face {
+  font-family: display;
+  src: url("/assets/digital.ttf");
+}
+
+.calculator__main {
+  background-color: #e1b3ba;
+  padding: 2rem;
+}
+
+.calculator {
+  width: 51rem;
+  padding: .5rem;
+  border-radius: .5rem;
+  background-color: #d58f9a;
+}
+
+.calculator__showEquation {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  padding: 2rem;
+  background-color: black;
+  font-family: display;
+  font-size: 2.5rem;
+  color: red;
+  border-radius: .25rem;
+}
+
+.calculator__display {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  padding: 2rem;
+  background-color: black;
+  font-family: display;
+  font-size: 5rem;
+  color: red;
+  border-radius: .25rem;
+}
+
+.calculator__calcBoard {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: .5rem;
+  padding: .5rem;
+  background-color: #e9b3bb;
+  font-size: 2rem;
+  border-radius: .25rem;
+  -webkit-box-shadow: 1px 1px 1px black;
+          box-shadow: 1px 1px 1px black;
+}
+
+.calculator__calcBoard--button {
+  margin: .1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 12rem;
+  height: 6rem;
+  cursor: pointer;
+  border: 1px solid black;
+  border-radius: .25rem;
+  -webkit-box-shadow: 1px 1px 1px black;
+          box-shadow: 1px 1px 1px black;
+}
+
+.calculator__calcBoard--button:hover {
+  background-color: #cccccc;
+  -webkit-box-shadow: -.5px -.5px 1px black;
+          box-shadow: -.5px -.5px 1px black;
+}
+/*# sourceMappingURL=main.css.map */
