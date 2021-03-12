@@ -9,7 +9,7 @@ class Calculator extends UI {
         rows: 6,
         columns: 4,
         boardButtonValues: ["%", "CE", "C", "bckspc", "1/x", "x^2", "2sqrtX", "/", "7", "8", "9", "*", "4", "5", "6", "-", "1", "2", "3", "+", "+/-", "0", ".", "="],
-        operators: ["+", "-", "*", "/", "=", "%"],
+        operators: ["+", "-", "*", "/", "=", "."],
         numbers: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
     };
 
@@ -27,6 +27,7 @@ class Calculator extends UI {
         this.display.setValue(0);
         this.equationDisplay.init();
         this.equationDisplay.setValue();
+        this.dataArray[0] = 0;
     };
 
     generateButtons() {
@@ -60,7 +61,7 @@ class Calculator extends UI {
     iterator = 0;
     result = 0;
     button = null;
-
+    
     buttonEventListeners() {
         this.boardButtons = this.getElements(this.UISelectors.button);
         this.boardButtons.forEach(element => {
@@ -79,81 +80,84 @@ class Calculator extends UI {
                     this.handleOperator(this.button.value);
                 };
 
-                if(this.button.value === "bckspc") {
-                    this.displayValue.pop();
-                    this.display.setValue(this.displayValue.join(""));
-                    this.number = parseFloat(this.display.value);
-                    this.dataArray[this.iterator] = this.number;
-                    if(this.displayValue.length === 0) {
-                        this.display.setValue(0);
-                    };
-                };
-                
-                if(this.button.value === "x^2") {
-                    let number = this.display.value;
-                    let powNumber = this.display.value;
-                    this.equationDisplay.setValue(`${powNumber}^2`)
-                    let result = Math.pow(number, 2);
-                    this.display.setValue(result);
-                    this.dataArray[0] = result;
-                    this.result = this.dataArray[0];
-                    this.number = this.display.value;
-                };
-                
-                if(this.button.value === "2sqrtX") {
-                    let number = this.display.value;
-                    let sqrtNumber = this.display.value;
-                    this.equationDisplay.setValue(`sqrt(${number})`)
-                    let result = Math.sqrt(sqrtNumber);
-                    this.display.setValue(result);
-                    this.result = result;
-                    this.dataArray[0] = this.result;
-                    this.number = this.display.value;
-                };
-
-                if(this.button.value === "1/x") {
-                    let number = this.display.value;
-                    if(number === 0) {
-                        this.display.setValue("are you kiddin me?")
-                    } else {
-                        let result = 1 / (number);
-                        this.display.setValue(result);
-                        this.result = result;
-                        this.dataArray[0] = this.result;
-                        this.number = this.display.value;
-                    }
-                };
-
-                if(this.button.value === "+/-") {
-                    if(this.lastOperator === "=" || this.currentOperator === null) {
+                switch(this.button.value) {
+                    case "bckspc":
+                        this.displayValue.pop();
+                        this.display.setValue(this.displayValue.join(""));
+                        this.number = parseFloat(this.display.value);
+                        this.dataArray[this.iterator] = this.number;
+                        if(this.displayValue.length === 0) {
+                            this.display.setValue(0);
+                        };
+                        break;
+                    case "x^2":
                         let number = this.display.value;
-                        this.equationDisplay.setValue(`negate (${number})`)
-                        let result = -1 * number;
+                        let powNumber = this.display.value;
+                        this.equationDisplay.setValue(`${powNumber}^2`)
+                        let result = Math.pow(number, 2);
                         this.display.setValue(result);
                         this.dataArray[0] = result;
                         this.result = this.dataArray[0];
                         this.number = this.display.value;
-                    } else {
-                        let number = this.display.value;
-                        let result = -1 * number;
-                        if(result < 0) {
-                            this.display.setValue(`(${result})`);
-                        } else {
-                            this.display.setValue(result);
-                        }
-                        this.dataArray[this.iterator] = result;
+                        break;
+                    case "2sqrtX":
+                        let number2 = this.display.value;
+                        let sqrtNumber = this.display.value;
+                        this.equationDisplay.setValue(`sqrt(${number2})`)
+                        let result2 = Math.sqrt(sqrtNumber);
+                        this.result = result2;
+                        this.dataArray[0] = this.result;
                         this.number = this.display.value;
-                    }
+                        break;
+                    case "1/x":
+                        let number3 = this.display.value;
+                    if(number3 === 0 || number3 === null) {
+                        this.display.setValue("are you kiddin me?")
+                    } else {
+                        let result3 = 1 / (number3);
+                        this.display.setValue(result3);
+                        this.result = result3;
+                        this.dataArray[0] = this.result;
+                        this.number = this.display.value;
+                    };
+                        break;
+                    case "+/-":
+                        if(this.lastOperator === "=" || this.currentOperator === null) {
+                            let number4 = this.display.value;
+                            this.equationDisplay.setValue(`negate (${number4})`)
+                            let result4 = -1 * number4;
+                            this.display.setValue(result4);
+                            this.dataArray[0] = result4;
+                            this.result = this.dataArray[0];
+                            this.number = this.display.value;
+                        } else {
+                            let number4 = this.display.value;
+                            let result4 = -1 * number4;
+                            this.display.setValue(result4);
+                            this.dataArray[this.iterator] = result4;
+                            this.number = this.display.value;
+                        };
+                        break;
+                    case "%":
+                        let numberA = this.dataArray[0];
+                        let numberB = this.display.value;
+                        let result5 = parseFloat(numberA * (1 - numberB/100)).toFixed(2);
+                        let rest = numberA - result5;
+                        this.dataArray[1] = parseFloat(rest);
+                        this.equationValue[2] = rest; 
+                        this.equationDisplay.setValue(this.equationValue.join(""));
+                        this.result = parseFloat(rest);
+                        this.setResultDisplayValue();
+                        this.dataArray[0] = numberA;
+                        break;
+                    case "C":
+                        this.resetAll();
+                        break;
+                    case "CE":
+                        this.displayValue = [];
+                        this.display.setValue(0);
+                        break;
                 }
-
-                if(this.button.value === "C") {
-                    this.resetAll();
-                };
-
-                if(this.button.value === "CE") {
-                    this.displayValue = [];
-                    this.display.setValue(0);
-                };
             });
         });
     };
@@ -170,15 +174,21 @@ class Calculator extends UI {
     };
 
     handleNumber(button) {
-        this.displayValue.push(button); 
-        this.display.setValue(this.displayValue.join(""));
-        this.number = parseFloat(this.display.value);
-        this.dataArray[this.iterator] = this.number;
+        if((this.number === 0 && button === ".") || (this.display.value === 0 && button === ".")) {
+            this.displayValue = ["0", "."]
+            this.display.setValue(this.displayValue.join(""));
+        } else if(this.displayValue.includes(".") && button === "." || this.displayValue[0] === "0" && this.button.value === "0") {
+            this.displayValue.slice(1, 1);
+            this.display.setValue(this.displayValue.join(""));
+        } else { 
+            this.displayValue.push(button); 
+            this.display.setValue(this.displayValue.join(""));
+            this.number = parseFloat(this.display.value);
+            this.dataArray[this.iterator] = this.number;
+        };
     };
     
     handleOperator(operator) {
-        let changeEqautionArray;
-        
         if(this.number != null && this.lastOperator !== "=") {
             this.equationValue.push(this.number);
             this.equationValue.push(operator);
@@ -187,25 +197,12 @@ class Calculator extends UI {
             this.currentOperator = this.equationValue[this.equationValue.length - 3];
             this.lastOperator = this.equationValue[this.equationValue.length - 1];
             this.iterator++;
-
-            if(operator === "%") {
-                let numberA = this.dataArray[0];
-                let numberB = this.display.value;
-                let result = parseFloat(numberA * (1 + numberB/100) - numberA).toFixed(2);
-                this.equationValue[2] = result; 
-                this.equationDisplay.setValue(this.equationValue.join(""));
-                this.result = parseFloat(result);
-                this.setResultDisplayValue();
-                this.dataArray[0] = numberA;
-                this.dataArray[1] = parseFloat(result);
-            }
             
             if(this.currentOperator != null && this.currentOperator !== "=" && this.lastOperator != "%") {
                 switch(this.currentOperator) {
-                    case "+":
+                    case "+":   
                         this.result = this.dataArray[0];
                         this.result = this.result + this.dataArray[this.iterator-1];
-                        console.log(this.dataArray[this.iterator-1]);
                         this.dataArray[0] = this.result;
                         this.setResultDisplayValue();
                         break;
@@ -235,7 +232,6 @@ class Calculator extends UI {
                 case "=":
                     if(this.lastOperator === "=") {
                         this.result = this.display.value;
-                        this.setEquationDisplayValue();
                     }
                     if(this.currentOperator === "+") {
                         this.setEquationDisplayValue();
@@ -260,16 +256,20 @@ class Calculator extends UI {
                     }
                     break;
                 case "+":
-                    this.anotherSignThanEqual(changeEqautionArray);
+                    this.anotherSignThanEqual();
                     break;
                 case "-":
-                    this.anotherSignThanEqual(changeEqautionArray);
+                    this.anotherSignThanEqual();
                     break;
                 case "*":
-                    this.anotherSignThanEqual(changeEqautionArray);
+                    this.anotherSignThanEqual();
                     break;
                 case "/":
-                    this.anotherSignThanEqual(changeEqautionArray);
+                    this.anotherSignThanEqual();
+                    break;
+                case ".":
+                    this.equationValue = [];
+                    this.equationDisplay.setValue(this.equationValue);  
                     break;
             };
         } else if(this.number === null) {
@@ -282,12 +282,9 @@ class Calculator extends UI {
         this.number = null;
     };
 
-    anotherSignThanEqual(equationArray) {
-        this.dataArray[0] = this.result;
-        this.equationValue[0] = this.result;
-        this.equationValue[1] = this.button.value;
-        equationArray = this.equationValue.slice(0, 2);
-        this.equationValue = equationArray;
+    anotherSignThanEqual() {
+        this.dataArray[0] = this.display.value;
+        this.equationValue = [this.dataArray[0], this.button.value];
         this.equationDisplay.setValue(this.equationValue.join(""));
         this.lastOperator = this.currentOperator;
     };
@@ -297,7 +294,8 @@ class Calculator extends UI {
     };
 
     setEquationDisplayValue() {
-        this.equationValue[0] = this.result; 
+        let length = this.dataArray.length;
+        this.equationValue = [this.result, this.currentOperator, this.dataArray[length-1], this.lastOperator]; 
         this.equationDisplay.setValue(this.equationValue.join(""));
     };
 };
