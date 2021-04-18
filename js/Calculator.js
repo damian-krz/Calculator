@@ -1,4 +1,5 @@
-import { Button } from "./Button.js";
+// import { Button } from "./Button.js";
+import { Board } from "./Board.js";
 import { Display } from "./Display.js";
 import { UI } from "./UI.js";
 import { EquationDisplay } from "./EquationDisplay.js";
@@ -15,13 +16,14 @@ class Calculator extends UI {
 
     display = new Display();
     equationDisplay = new EquationDisplay();
+    board = new Board();
     buttons = [];
-    board = this.getElement(this.UISelectors.board);
     
     runCalculator() {
-        this.generateButtons();
-        this.renderBoard();
-        this.fillButtonsContent();
+        this.board.init();
+        this.board.generateButtons(this.config.rows, this.config.columns, this.buttons);
+        this.board.renderBoard(this.buttons, this.board);
+        this.board.fillButtonsContent(this.config.boardButtonValues);
         this.buttonEventListeners();
         this.display.init();
         this.display.setValue(0);
@@ -30,27 +32,6 @@ class Calculator extends UI {
         this.dataArray[0] = 0;
     };
 
-    generateButtons() {
-        for(let row = 0; row < this.config.rows; row++) {
-            this.buttons[row] = [];
-            for(let column = 0; column < this.config.columns; column++) {
-                this.buttons[row].push(new Button(row, column));
-            };
-        };
-    };
-
-    renderBoard() {
-        this.buttons.flat().forEach((button) => {
-            this.board.insertAdjacentHTML("beforeend", button.createButton());
-        });
-    };
-
-    fillButtonsContent() {
-        for(let i = 0; i < this.config.boardButtonValues.length; i++) {
-            this.board.children[i].textContent = `${this.config.boardButtonValues[i]}`;
-        };
-    };
-    
     equationValue = [];
     displayValue = [];
     currentOperator = null;
