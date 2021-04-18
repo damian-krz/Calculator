@@ -8,8 +8,8 @@ class Calculator extends UI {
     config = {
         rows: 6,
         columns: 4,
-        boardButtonValues: ["%", "CE", "C", "bckspc", "1/x", "x^2", "2sqrtX", "/", "7", "8", "9", "*", "4", "5", "6", "-", "1", "2", "3", "+", "+/-", "0", ".", "="],
-        operators: ["+", "-", "*", "/", "=", "."],
+        boardButtonValues: ["", "CE", "C", "bckspc", "1/x", "x^2", "2sqrtX", "/", "7", "8", "9", "*", "4", "5", "6", "-", "1", "2", "3", "+", "+/-", "0", ".", "="],
+        operators: ["+", "-", "*", "/", "="],
         numbers: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
     };
 
@@ -42,7 +42,6 @@ class Calculator extends UI {
     renderBoard() {
         this.buttons.flat().forEach((button) => {
             this.board.insertAdjacentHTML("beforeend", button.createButton());
-            button.element = button.getElement(button.selector);
         });
     };
 
@@ -112,7 +111,7 @@ class Calculator extends UI {
                     case "1/x":
                         let number3 = this.display.value;
                     if(number3 === 0 || number3 === null) {
-                        this.display.setValue("are you kiddin me?")
+                        this.display.setValue("are you kiddin me?");
                     } else {
                         let result3 = 1 / (number3);
                         this.display.setValue(result3);
@@ -138,18 +137,6 @@ class Calculator extends UI {
                             this.number = this.display.value;
                         };
                         break;
-                    case "%":
-                        let numberA = this.dataArray[0];
-                        let numberB = this.display.value;
-                        let result5 = parseFloat(numberA * (1 - numberB/100)).toFixed(2);
-                        let rest = numberA - result5;
-                        this.dataArray[1] = parseFloat(rest);
-                        this.equationValue[2] = rest; 
-                        this.equationDisplay.setValue(this.equationValue.join(""));
-                        this.result = parseFloat(rest);
-                        this.setResultDisplayValue();
-                        this.dataArray[0] = numberA;
-                        break;
                     case "C":
                         this.resetAll();
                         break;
@@ -171,6 +158,7 @@ class Calculator extends UI {
         this.equationDisplay.setValue();
         this.currentOperator = null;
         this.lastOperator = null;
+        this.result = 0;
     };
 
     handleNumber(button) {
@@ -219,11 +207,16 @@ class Calculator extends UI {
                         this.setResultDisplayValue();
                         break;
                     case "/":
-                        this.result = this.dataArray[0];
-                        this.result = this.result / this.dataArray[this.iterator-1];
-                        this.dataArray[0] = this.result;
-                        this.setResultDisplayValue();
-                        break;
+                        if(this.dataArray[this.iterator-1] == 0){        
+                            this.resetAll();
+                            this.display.setValue("u can't divide by 0");
+                        } else {
+                            this.result = this.dataArray[0];
+                            this.result = this.result / this.dataArray[this.iterator-1];
+                            this.dataArray[0] = this.result;
+                            this.setResultDisplayValue();
+                            break; 
+                        }
                 };
             };
 
@@ -249,10 +242,16 @@ class Calculator extends UI {
                         this.dataArray[0] = this.result;
                         this.setResultDisplayValue();
                     } else if(this.currentOperator === "/") {
-                        this.setEquationDisplayValue();
-                        this.result = this.result / this.dataArray[this.iterator-1];
-                        this.dataArray[0] = this.result;
-                        this.setResultDisplayValue();
+                        if(this.dataArray[this.iterator-1] == 0){
+                            this.resetAll();
+                            this.display.setValue("u can't divide by zero");
+                        } else {
+                            this.result = this.dataArray[0];
+                            this.result = this.result / this.dataArray[this.iterator-1];
+                            this.dataArray[0] = this.result;
+                            this.setResultDisplayValue();
+                            break; 
+                        }
                     }
                     break;
                 case "+":

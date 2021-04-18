@@ -7,7 +7,6 @@ export class Button extends UI {
         this.x = x;
         this.value = null;
         this.element = null;
-        this.selector = `[data-y="${this.y}"][data-x="${this.x}"]`;
     };
 
     createButton() {
